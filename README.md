@@ -1,92 +1,171 @@
 # WIN Material Intelligence Cloud
 
-TanStack-first MVP implementation for the WIN Material Intelligence Cloud concept.
+WIN Material Intelligence Cloud is a TanStack-first application for operational intelligence across material flow, diversion performance, reporting readiness, and optimization decisioning.
 
-## What this implements
+This repository represents an MVP foundation designed for:
 
-- Executive command center for material flow, diversion, rail movement, renewable power equivalent, recommendation value, and exception count.
-- Strategic account portfolio and account-level workspaces.
-- Canonical material event ledger with source lineage, evidence, quality state, and calculation version.
-- Recommendation center for haul optimization, compactor conversion, diversion, reporting, and rail opportunities.
-- Customer report staging and approval surface using TanStack Form.
-- Exception queue for data-quality and report-readiness governance.
-- Governance screen for calculation factors, tenant isolation, claim templates, source adapters, and TanStack Start migration posture.
-- Modular plug-in contracts for source adapters and ledger validation modules.
-- Reusable async, table, account filtering, status, and metric UI primitives.
-- Phase 0-8 completion surfaces: roadmap, ingestion/reconciliation, optimization, commercial packaging, enterprise flywheel, and security controls.
-- Simulation Mode for executive demos without live WIN integrations, including before/after scenarios, injected events, and customer-ready takeaways.
+- Executive visibility.
+- Trustworthy data lineage.
+- Workflow-driven recommendations.
+- Scalable architecture for production migration.
 
-## UX and visual system
+## Why this project exists
 
-The app shell is benchmarked against leading waste, recycling, sustainability, and managed-service sites: WM, RTS, Casella, Recology, Republic Services, RoadRunner, GFL, Waste Connections, CR&R, and WIN Waste. The theme borrows the strongest patterns for an enterprise application context:
+Material and sustainability programs need one place to measure performance, explain variance, and act with confidence. This platform provides a unified operating layer that combines portfolio views, event-level ledger data, exception governance, and scenario modeling.
 
-- Utility-first header actions for support, reports, optimization, and trust.
-- Prominent customer-portal posture and tenant context.
-- Left navigation for a large operational information architecture.
-- Proof metrics above the fold.
-- Dense but readable footer/status links for governance, source health, and enterprise scale.
-- High-contrast sustainability palette without turning the product into a generic green marketing page.
+## Audience guides
 
-## Simulation Mode
+### Executive stakeholder view
 
-Simulation Mode is designed for demos, sales conversations, and stakeholder alignment before real source-system integrations are available. It adapts public best-practice concepts from simulation/control-room products such as SCM Labs, Execsim, LambdaSim, IBM Envizi Planning Analytics, Terragrit, BusinessOptix, AnyLogic, SCM Globe, FLEXEE, and Lagrange.AI.
+WIN Material Intelligence Cloud provides a single operating picture for material performance, reporting confidence, and value creation.
 
-The 10 included demos are:
+- Business outcomes: Better diversion performance, clearer operational accountability, and faster decision cycles.
+- Leadership visibility: KPI-centric command center with account-level drill-down.
+- Governance confidence: Explicit exception handling, security posture, and audit-oriented controls.
+- Scale readiness: Roadmap and architecture designed to move from MVP to enterprise rollout.
 
-- Compactor right-sizing.
-- University move-out diversion.
-- Hospital compliance recovery.
-- Rail disruption and transfer reroute.
-- ESG target what-if planner.
-- MRF contamination digital twin.
-- WTE capacity and outage rehearsal.
-- Renewal defense value simulator.
-- Route carbon and service reliability optimizer.
-- Storm response municipal surge.
-- Enterprise ESG API launch.
+Recommended starting flow:
 
-Each scenario shows annual savings, diversion lift, verified coverage improvement, exception reduction, event injections, and the executive narrative the app would generate.
+1. Review Command Center for current-state performance.
+2. Review Exceptions for risk and data-quality hotspots.
+3. Review Recommendations and Optimization for value opportunities.
+4. Review Roadmap for phase completion and investment posture.
 
-## TanStack usage
+### Engineering contributor view
 
-- `@tanstack/react-router` for route contracts and account detail params.
-- `@tanstack/react-query` for server-state fetching, cache conventions, and async boundaries.
-- `@tanstack/react-table` for portfolio, ledger, reports, recommendations, and exception tables.
-- `@tanstack/react-form` for report staging workflow validation.
-- `@tanstack/react-store` for a small example review workflow store.
+This repository is built for contract-first evolution, predictable route composition, and production migration readiness.
 
-The plan document recommended TanStack Start for the mature full-stack version. This MVP keeps the route and query boundaries explicit so it can move to TanStack Start server functions after real source adapters, auth, report jobs, and ledger services are connected.
+- Clear boundaries: Routes orchestrate UI composition, while domain and lib layers own contracts and logic.
+- Extensibility: Source integrations and ledger validations are designed as typed plug-ins.
+- Maintainability: Shared query patterns and module registry conventions reduce coupling.
+- Migration path: Current Vite setup intentionally preserves compatibility with a TanStack Start server-function model.
 
-## Run locally
+Recommended onboarding flow:
+
+1. Read [ARCHITECTURE.md](ARCHITECTURE.md) for layer responsibilities and rules.
+2. Review module-to-route mapping in this README.
+3. Run locally and inspect route-level composition under [src/routes](src/routes).
+4. Add features through registries/interfaces before editing route implementations.
+
+### Customer and product-facing view
+
+This platform helps teams explain performance, prioritize actions, and communicate verified progress with confidence.
+
+- Operational clarity: Portfolio and account workspaces connect actions to measurable outcomes.
+- Trust and traceability: Ledger-first model strengthens confidence in reportable claims.
+- Actionable intelligence: Recommendations and optimization workflows support practical next steps.
+- Demo readiness: Simulation Mode communicates before/after value in stakeholder-friendly scenarios.
+
+Recommended demo flow:
+
+1. Start in Simulation Mode for outcome storytelling.
+2. Move to Command Center for current KPI context.
+3. Show Ledger and Exceptions to establish trust and controls.
+4. Close with Recommendations and Reports for action and communication readiness.
+
+## Core capabilities
+
+- Command Center for KPI-first operational oversight.
+- Account Portfolio and Account Detail workspaces.
+- Canonical Material Ledger with source lineage and validation posture.
+- Ingestion and source-adapter operational surfaces.
+- Recommendations and Optimization workspaces with human-approval posture.
+- Reports and governance-aligned reporting workflow support.
+- Exceptions queue for data-quality and report-readiness operations.
+- Governance and Security modules for controls, tenancy, and audit posture.
+- Simulation Mode for executive demonstrations and scenario narratives.
+- Roadmap coverage for Phase 0 through Phase 8 maturity planning.
+
+## Product module map
+
+| Module | Route | Primary purpose | Maturity phase |
+| --- | --- | --- | --- |
+| Command Center | `/dashboard` | Executive operating view | Phase 4 |
+| Roadmap | `/roadmap` | Program phase completion control | Phase 0-8 |
+| Simulation Mode | `/simulation` | Scenario-driven executive demos | Demo |
+| Accounts | `/accounts` | Portfolio and account workspaces | Phase 4 |
+| Material Ledger | `/ledger` | Canonical trust and lineage layer | Phase 2 |
+| Ingestion | `/ingestion` | Source adapters and reconciliation | Phase 2 |
+| Recommendations | `/recommendations` | Human-approved optimization actions | Phase 5 |
+| Optimization | `/optimization` | What-if analysis and AI-assist readiness | Phase 5 |
+| Reports | `/reports` | ESG-ready reporting support | Phase 4 |
+| Commercial | `/commercial` | Pilot hardening and packaging | Phase 6-7 |
+| Enterprise | `/enterprise` | Enterprise flywheel progression | Phase 8 |
+| Exceptions | `/exceptions` | Data-quality operations | Phase 2 |
+| Security | `/security` | Tenant and claims governance | Production |
+| Governance | `/admin` | Controls and auditability | Phase 6 |
+
+## Architecture at a glance
+
+The codebase follows contract-first modular boundaries so capabilities can evolve without destabilizing the platform.
+
+- `src/app`: Application configuration, navigation registry, and shared query behavior.
+- `src/components`: Reusable shell and domain-aware UI building blocks.
+- `src/shared/ui`: Domain-agnostic UI primitives.
+- `src/domain`: Business contracts, adapter interfaces, and validation definitions.
+- `src/plugins`: Adapter and validation plug-in registration.
+- `src/lib`: API facade, calculations, query conventions, and utility logic.
+- `src/routes`: Route composition only; no hidden service-layer logic.
+- `src/data`: MVP mock data, intended to be replaced by production integrations.
+
+For full maintainability rules and extension guidance, see [ARCHITECTURE.md](ARCHITECTURE.md).
+
+## Technology stack
+
+- React 18 with TypeScript.
+- Vite build and development toolchain.
+- TanStack Router for typed route contracts.
+- TanStack Query for server-state orchestration.
+- TanStack Table for data-intensive workspaces.
+- TanStack Form for structured workflow validation.
+- TanStack Store for lightweight client state patterns.
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Install
 
 ```bash
 npm install
+```
+
+### Run locally
+
+```bash
 npm run dev
 ```
 
-Then open `http://127.0.0.1:3144`.
+Application URL: http://127.0.0.1:3144
 
-## Build
+### Build for production
 
 ```bash
 npm run build
 ```
 
-## Suggested next implementation stages
+## NPM scripts
 
-1. Replace mock data with real ledger APIs backed by WIN source-system adapters.
-2. Connect production identity, tenant-aware routes, and object authorization.
-3. Replace simulated report staging with asynchronous report generation jobs.
-4. Persist recommendation approvals and optimization decisions.
-5. Add TanStack Virtual to the ledger table once real event volumes exceed ordinary pagination.
-6. Migrate to TanStack Start server functions when the server boundary is ready.
+- `npm run dev`: Start local development server.
+- `npm run build`: Type-check and create a production bundle.
+- `npm run preview`: Preview the production build locally.
 
-## Project structure
+## Implementation direction
 
-See `ARCHITECTURE.md` for maintainability rules, extension points, and the TanStack Start migration path.
+Recommended next delivery steps:
 
-## Repository owner
+1. Replace mock data with production-grade ledger APIs and source adapters.
+2. Add production identity, tenant-aware authorization, and object-level controls.
+3. Evolve report workflows from staged simulation to asynchronous job execution.
+4. Persist recommendation approval and optimization decision trails.
+5. Introduce virtualization for high-volume ledger workloads.
+6. Migrate to TanStack Start server functions as backend boundaries mature.
 
-- Name: [Aarti Sri Ravikumar](https://www.ai-aarti.com)
-- GitHub: [aartisr](https://github.com/aartisr)
+## Repository ownership
+
+- Owner name: [Aarti Sri Ravikumar](https://www.ai-aarti.com)
+- GitHub user: [aartisr](https://github.com/aartisr)
 - Repository: [win-material-intelligence-cloud](https://github.com/aartisr/win-material-intelligence-cloud)
