@@ -139,7 +139,7 @@ npm install
 npm run dev
 ```
 
-Application URL: http://127.0.0.1:3144
+Application URL: [http://127.0.0.1:3144](http://127.0.0.1:3144)
 
 ### Build for production
 
