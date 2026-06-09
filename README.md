@@ -153,6 +153,24 @@ npm run build
 - `npm run build`: Type-check and create a production bundle.
 - `npm run preview`: Preview the production build locally.
 
+## Deploy on Vercel
+
+This repository is configured for Vercel deployment as a Vite single-page app.
+
+What is already configured:
+- `vercel.json` sets the build command to `npm run build`.
+- `vercel.json` sets the output directory to `dist`.
+- `vercel.json` adds an SPA rewrite so deep links (for example `/dashboard`, `/accounts/123`) resolve to `index.html`.
+
+Deployment steps:
+
+1. Import this repository into Vercel.
+2. Keep the default Node.js runtime selected by Vercel.
+3. Deploy with:
+	- Build Command: `npm run build`
+	- Output Directory: `dist`
+4. Open any deep route URL directly to confirm rewrite behavior.
+
 ## Implementation direction
 
 Recommended next delivery steps:
