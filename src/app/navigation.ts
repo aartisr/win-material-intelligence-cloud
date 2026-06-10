@@ -9,6 +9,14 @@ export type AppModule = {
 
 export const appModules: AppModule[] = [
   {
+    id: "home",
+    label: "Home",
+    shortLabel: "HM",
+    path: "/home",
+    capability: "Leadership story and decision launchpad",
+    phase: "Executive",
+  },
+  {
     id: "command-center",
     label: "Command Center",
     shortLabel: "CC",

@@ -21,8 +21,8 @@ export function Dashboard() {
     <>
       <PageHeader
         eyebrow="Executive command center"
-        title="Material flow, service value, and trust signals in one place"
-        description="A TanStack-powered operating surface for the material event ledger, customer reports, recommendations, and exception governance."
+        title="Deep analytics for material flow, service value, and trust signals"
+        description="A deeper operating view for leadership and operators to track performance, quality, and execution readiness in one place."
         actions={<Link className="hero-action" to="/simulation">Launch simulation mode</Link>}
       />
 

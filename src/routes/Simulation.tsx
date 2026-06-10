@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MetricCard } from "../components/MetricCard";
 import { PageHeader } from "../components/PageHeader";
 import { StatusBadge } from "../components/StatusBadge";
@@ -9,7 +9,7 @@ import { AsyncState } from "../shared/ui/AsyncState";
 
 export function Simulation() {
   const query = useQuery({ queryKey: queryKeys.simulationScenarios, queryFn: api.simulationScenarios });
-  const [scenarioId, setScenarioId] = useState<string>("");
+  const [scenarioId, setScenarioId] = useState<string>(() => readScenarioFromHash());
   const [hasRun, setHasRun] = useState(false);
   const scenarios = query.data ?? [];
   const selected = useMemo(
@@ -23,6 +23,23 @@ export function Simulation() {
   const exceptionReduction = selected ? selected.before.exceptions - selected.after.exceptions : 0;
   const railLift = selected ? selected.after.railTons - selected.before.railTons : 0;
   const totalSavings = scenarios.reduce((sum, scenario) => sum + scenario.before.annualCost - scenario.after.annualCost, 0);
+
+  useEffect(() => {
+    const onHashChange = () => setScenarioId(readScenarioFromHash());
+    window.addEventListener("hashchange", onHashChange);
+    onHashChange();
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  useEffect(() => {
+    if (!selected) {
+      return;
+    }
+    const nextHash = `#${selected.id}`;
+    if (window.location.hash !== nextHash) {
+      window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}${nextHash}`);
+    }
+  }, [selected]);
 
   return (
     <>
@@ -165,6 +182,11 @@ export function Simulation() {
       </AsyncState>
     </>
   );
+}
+
+function readScenarioFromHash() {
+  const hash = window.location.hash.replace("#", "").trim();
+  return hash ? decodeURIComponent(hash) : "";
 }
 
 function ImpactColumn({

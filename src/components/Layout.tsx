@@ -11,15 +11,17 @@ export function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand">
-          <div className="brand-mark">
-            <span>WIN</span>
+        <Link to="/home" className="brand-link">
+          <div className="brand">
+            <div className="brand-mark">
+              <span>WIN</span>
+            </div>
+            <div>
+              <strong>Material Intelligence</strong>
+              <span>Cloud · Enterprise command layer</span>
+            </div>
           </div>
-          <div>
-            <strong>Material Intelligence</strong>
-            <span>Cloud · Enterprise command layer</span>
-          </div>
-        </div>
+        </Link>
         <div className="sidebar-kpi">
           <span>Verified operating system</span>
           <strong>Phase 0-8 complete</strong>
@@ -58,6 +60,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <input placeholder="Accounts, reports, material events, source adapters" />
           </label>
           <div className="utility-actions" aria-label="Utility actions">
+            <Link to="/home">Home</Link>
             <Link to="/security">Trust Center</Link>
             <Link to="/reports">Export</Link>
             <Link to="/optimization">Optimize</Link>

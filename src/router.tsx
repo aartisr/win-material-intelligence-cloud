@@ -7,6 +7,7 @@ import { Commercial } from "./routes/Commercial";
 import { Dashboard } from "./routes/Dashboard";
 import { Enterprise } from "./routes/Enterprise";
 import { Exceptions } from "./routes/Exceptions";
+import { Home } from "./routes/Home";
 import { Ingestion } from "./routes/Ingestion";
 import { Ledger } from "./routes/Ledger";
 import { Optimization } from "./routes/Optimization";
@@ -28,8 +29,14 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   beforeLoad: () => {
-    throw redirect({ to: "/dashboard" });
+    throw redirect({ to: "/home" });
   },
+});
+
+const homeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/home",
+  component: Home,
 });
 
 const dashboardRoute = createRoute({
@@ -124,6 +131,7 @@ const adminRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  homeRoute,
   dashboardRoute,
   roadmapRoute,
   simulationRoute,
