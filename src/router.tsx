@@ -63,6 +63,12 @@ const simulationRoute = createRoute({
   component: Simulation,
 });
 
+const simulationDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/simulation/$scenarioId",
+  component: Simulation,
+});
+
 const accountDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/accounts/$accountId",
@@ -135,6 +141,7 @@ const routeTree = rootRoute.addChildren([
   dashboardRoute,
   roadmapRoute,
   simulationRoute,
+  simulationDetailRoute,
   accountsRoute,
   accountDetailRoute,
   ledgerRoute,

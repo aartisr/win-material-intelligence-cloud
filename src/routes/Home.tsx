@@ -156,8 +156,8 @@ export function Home() {
   return (
     <>
       <PageHeader
-        eyebrow="Leadership home"
-        title="This platform is the operating system leadership needs to grow with confidence"
+        eyebrow="Home"
+        title="WIN Operating System"
         description="It gives one trusted view of performance, risk, and opportunity so decisions happen faster, teams stay aligned, and customer value is easier to prove."
         actions={
           <div className="header-actions">
@@ -214,7 +214,13 @@ export function Home() {
           onBlurCapture={() => setIsCarouselPaused(false)}
         >
           {featuredSimulations.map((scenario, index) => (
-            <Link key={scenario.id} to="/simulation" hash={scenario.id} className="simulation-slide">
+            <Link
+              key={scenario.id}
+              to="/simulation/$scenarioId"
+              params={{ scenarioId: scenario.id }}
+              hash="details"
+              className="simulation-slide"
+            >
               <div className="simulation-slide-image-wrap">
                 <img src={buildSimulationVisual(scenario, index)} alt={`${scenario.name} simulation preview`} loading="lazy" />
               </div>

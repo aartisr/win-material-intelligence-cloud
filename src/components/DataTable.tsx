@@ -49,6 +49,7 @@ export function DataTable<TData>({
           />
         </label>
         <div className="table-actions">
+          <span className="table-meta-pill">{table.getFilteredRowModel().rows.length} records</span>
           <select
             aria-label="Rows per page"
             value={table.getState().pagination.pageSize}
@@ -75,7 +76,6 @@ export function DataTable<TData>({
               ))}
             </div>
           </details>
-          <span>{table.getFilteredRowModel().rows.length} records</span>
         </div>
       </div>
       <div className="table-wrap">

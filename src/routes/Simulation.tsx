@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MetricCard } from "../components/MetricCard";
 import { PageHeader } from "../components/PageHeader";
 import { StatusBadge } from "../components/StatusBadge";
@@ -9,12 +10,19 @@ import { AsyncState } from "../shared/ui/AsyncState";
 
 export function Simulation() {
   const query = useQuery({ queryKey: queryKeys.simulationScenarios, queryFn: api.simulationScenarios });
-  const [scenarioId, setScenarioId] = useState<string>(() => readScenarioFromHash());
+  const navigate = useNavigate();
+  const location = useLocation();
   const [hasRun, setHasRun] = useState(false);
+  const detailRef = useRef<HTMLElement | null>(null);
   const scenarios = query.data ?? [];
+  
+  // Extract scenario ID from URL path if present
+  const scenarioIdMatch = location.pathname.match(/^\/simulation\/([^/]+)$/);
+  const routeScenarioId = scenarioIdMatch ? decodeURIComponent(scenarioIdMatch[1]) : "";
+  
   const selected = useMemo(
-    () => scenarios.find((scenario) => scenario.id === scenarioId) ?? scenarios[0],
-    [scenarioId, scenarios],
+    () => scenarios.find((scenario) => scenario.id === routeScenarioId) ?? scenarios[0],
+    [routeScenarioId, scenarios],
   );
 
   const savings = selected ? selected.before.annualCost - selected.after.annualCost : 0;
@@ -23,23 +31,23 @@ export function Simulation() {
   const exceptionReduction = selected ? selected.before.exceptions - selected.after.exceptions : 0;
   const railLift = selected ? selected.after.railTons - selected.before.railTons : 0;
   const totalSavings = scenarios.reduce((sum, scenario) => sum + scenario.before.annualCost - scenario.after.annualCost, 0);
+  const selectedAccountLabel = selected ? formatEntityLabel(selected.accountId) : "";
 
-  useEffect(() => {
-    const onHashChange = () => setScenarioId(readScenarioFromHash());
-    window.addEventListener("hashchange", onHashChange);
-    onHashChange();
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
+  const selectScenario = (nextScenarioId: string, options?: { focusDetails?: boolean }) => {
+    setHasRun(false);
+    
+    navigate({
+      to: "/simulation/$scenarioId",
+      params: { scenarioId: nextScenarioId },
+      hash: options?.focusDetails ? "details" : undefined,
+    });
 
-  useEffect(() => {
-    if (!selected) {
-      return;
+    if (options?.focusDetails) {
+      window.requestAnimationFrame(() => {
+        detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     }
-    const nextHash = `#${selected.id}`;
-    if (window.location.hash !== nextHash) {
-      window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}${nextHash}`);
-    }
-  }, [selected]);
+  };
 
   return (
     <>
@@ -73,19 +81,20 @@ export function Simulation() {
                 {scenarios.map((scenario) => {
                   const active = scenario.id === selected.id;
                   return (
-                    <button
+                    <Link
                       key={scenario.id}
-                      type="button"
+                      to="/simulation/$scenarioId"
+                      params={{ scenarioId: scenario.id }}
+                      hash="details"
                       className={active ? "scenario-card active" : "scenario-card"}
                       onClick={() => {
-                        setScenarioId(scenario.id);
                         setHasRun(false);
                       }}
                     >
                       <span>{scenario.realism}</span>
                       <strong>{scenario.name}</strong>
                       <small>{scenario.pattern}</small>
-                    </button>
+                    </Link>
                   );
                 })}
               </section>
@@ -100,8 +109,7 @@ export function Simulation() {
                   <select
                     value={selected.id}
                     onChange={(event) => {
-                      setScenarioId(event.target.value);
-                      setHasRun(false);
+                      selectScenario(event.target.value);
                     }}
                   >
                     {scenarios.map((scenario) => (
@@ -117,16 +125,53 @@ export function Simulation() {
                   <p className="pressure-event">{selected.pressureEvent}</p>
                   <strong>{selected.durationDays} simulated days</strong>
                 </div>
+                <div className="scenario-facts" aria-label="Selected scenario quick facts">
+                  <div className="scenario-fact">
+                    <span>Account</span>
+                    <strong>{selectedAccountLabel}</strong>
+                  </div>
+                  <div className="scenario-fact">
+                    <span>Trigger</span>
+                    <strong>{selected.trigger}</strong>
+                  </div>
+                  <div className="scenario-fact">
+                    <span>Mode</span>
+                    <strong>{selected.realism}</strong>
+                  </div>
+                  <div className="scenario-fact">
+                    <span>Duration</span>
+                    <strong>{selected.durationDays} days</strong>
+                  </div>
+                </div>
               </section>
 
-              <section className={hasRun ? "simulation-stage active" : "simulation-stage"}>
+              <section ref={detailRef} className={hasRun ? "simulation-stage active" : "simulation-stage"}>
                 <div className="simulation-stage-header">
                   <div>
                     <span className="eyebrow">Before / After</span>
                     <h2>{selected.name}</h2>
                     <p>{selected.pattern}</p>
                   </div>
-                  <StatusBadge value={hasRun ? "customer-ready" : "draft"} />
+                  <div className="simulation-stage-actions">
+                    <StatusBadge value={hasRun ? "customer-ready" : "draft"} />
+                    <button type="button" className="hero-action hero-action-light" onClick={() => setHasRun(true)}>
+                      {hasRun ? "Rerun scenario" : "Run selected scenario"}
+                    </button>
+                  </div>
+                </div>
+                <div className="simulation-detail-banner">
+                  <div>
+                    <span>Selected scenario</span>
+                    <strong>{selectedAccountLabel}</strong>
+                  </div>
+                  <div>
+                    <span>Pressure event</span>
+                    <strong>{selected.pressureEvent}</strong>
+                  </div>
+                  <div>
+                    <span>Executive outcome</span>
+                    <strong>{formatCurrency(savings)} modeled annual savings</strong>
+                  </div>
                 </div>
                 <div className="metric-grid compact">
                   <MetricCard label="Annual savings" value={formatCurrency(savings)} detail="Modeled cost impact" icon="SV" />
@@ -184,9 +229,11 @@ export function Simulation() {
   );
 }
 
-function readScenarioFromHash() {
-  const hash = window.location.hash.replace("#", "").trim();
-  return hash ? decodeURIComponent(hash) : "";
+function formatEntityLabel(value: string) {
+  return value
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 function ImpactColumn({
